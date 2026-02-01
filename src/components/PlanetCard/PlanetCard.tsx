@@ -1,47 +1,28 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import type { Planet } from '../../types/swapi'
 import { extractIdFromUrl } from '../../services/swapi'
-import { useResidents } from '../../hooks/useResidents'
+import { usePlanetResidents } from '../../hooks/usePlanetResidents'
+import { formatPopulation } from '../../utils/formatting'
 import { LoadMoreButton } from '../LoadMoreButton'
-import type { Person } from '../../types/swapi'
+import { PlanetDetailItem } from './PlanetDetailItem'
+import { ResidentsList } from './ResidentsList'
 import styles from './PlanetCard.module.css'
 
 interface PlanetCardProps {
   planet: Planet
 }
 
-function formatPopulation(population: string): string {
-  if (population === 'unknown') return 'Unknown'
-  const num = parseInt(population, 10)
-  if (isNaN(num)) return population
-  if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}B`
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
-  if (num >= 1000) return `${(num / 1000).toFixed(1)}K`
-  return num.toString()
-}
-
 export function PlanetCard({ planet }: PlanetCardProps) {
   const planetId = extractIdFromUrl(planet.url)
   const id = `planet-${planetId}`
-  const [loadedCount, setLoadedCount] = useState(3)
   
-  // Load residents incrementally (start with 3, load more on demand)
-  const residentsToLoad = planet.residents.slice(0, loadedCount)
-  const residentQueries = useResidents(residentsToLoad)
-  const residents = residentQueries
-    .map((query) => query.data)
-    .filter((resident): resident is Person => !!resident)
-  // Check if we're loading new residents (queries that don't have data yet)
-  const isLoadingNewResidents = residentQueries
-    .some((query) => query.isLoading && !query.data)
-  // Only show initial loading if we have no residents at all
-  const isInitialLoading = residents.length === 0 && residentQueries.some((query) => query.isLoading)
-  const hasMoreResidents = planet.residents.length > loadedCount
-  
-  const handleLoadMore = () => {
-    setLoadedCount((prev) => Math.min(prev + 3, planet.residents.length))
-  }
+  const {
+    residents,
+    isLoadingNewResidents,
+    isInitialLoading,
+    hasMoreResidents,
+    loadedCount,
+    loadMore,
+  } = usePlanetResidents(planet)
 
   return (
     <article
@@ -59,36 +40,27 @@ export function PlanetCard({ planet }: PlanetCardProps) {
       </header>
 
       <dl id={`${id}-details`} className={styles.details}>
-        <div className={styles.detailItem}>
-          <dt className={styles.detailLabel}>Climate</dt>
-          <dd className={styles.detailValue}>{planet.climate}</dd>
-        </div>
-        <div className={styles.detailItem}>
-          <dt className={styles.detailLabel}>Terrain</dt>
-          <dd className={styles.detailValue}>{planet.terrain}</dd>
-        </div>
-        <div className={styles.detailItem}>
-          <dt className={styles.detailLabel}>Population</dt>
-          <dd className={styles.detailValue}>{formatPopulation(planet.population)}</dd>
-        </div>
-        <div className={styles.detailItem}>
-          <dt className={styles.detailLabel}>Diameter</dt>
-          <dd className={styles.detailValue}>
-            {planet.diameter !== 'unknown' ? `${planet.diameter} km` : 'Unknown'}
-          </dd>
-        </div>
-        <div className={styles.detailItem}>
-          <dt className={styles.detailLabel}>Rotation Period</dt>
-          <dd className={styles.detailValue}>
-            {planet.rotation_period !== 'unknown' ? `${planet.rotation_period} hours` : 'Unknown'}
-          </dd>
-        </div>
-        <div className={styles.detailItem}>
-          <dt className={styles.detailLabel}>Orbital Period</dt>
-          <dd className={styles.detailValue}>
-            {planet.orbital_period !== 'unknown' ? `${planet.orbital_period} days` : 'Unknown'}
-          </dd>
-        </div>
+        <PlanetDetailItem label="Climate" value={planet.climate} />
+        <PlanetDetailItem label="Terrain" value={planet.terrain} />
+        <PlanetDetailItem 
+          label="Population" 
+          value={formatPopulation(planet.population)} 
+        />
+        <PlanetDetailItem 
+          label="Diameter" 
+          value={planet.diameter} 
+          unit="km" 
+        />
+        <PlanetDetailItem 
+          label="Rotation Period" 
+          value={planet.rotation_period} 
+          unit="hours" 
+        />
+        <PlanetDetailItem 
+          label="Orbital Period" 
+          value={planet.orbital_period} 
+          unit="days" 
+        />
       </dl>
 
       <footer className={styles.footer}>
@@ -102,24 +74,10 @@ export function PlanetCard({ planet }: PlanetCardProps) {
                 <span className={styles.loading}>Loading residents...</span>
               ) : residents.length > 0 ? (
                 <>
-                  <ul className={styles.residentNames}>
-                    {residents.map((resident) => {
-                      const residentId = extractIdFromUrl(resident.url)
-                      return (
-                        <li key={resident.url}>
-                          <Link 
-                            to={`/residents/${residentId}`}
-                            className={styles.residentLink}
-                          >
-                            {resident.name}
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
+                  <ResidentsList residents={residents} />
                   {hasMoreResidents && (
                     <LoadMoreButton
-                      onClick={handleLoadMore}
+                      onClick={loadMore}
                       isLoading={isLoadingNewResidents}
                       remainingCount={planet.residents.length - loadedCount}
                       label="Load More"
