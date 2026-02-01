@@ -22,11 +22,14 @@ function formatPopulation(population: string): string {
 export function PlanetCard({ planet }: PlanetCardProps) {
   const planetId = extractIdFromUrl(planet.url)
   const id = `planet-${planetId}`
-  const residentQueries = useResidents(planet.residents)
+  // Only load first 3 residents to reduce API calls
+  const firstThreeResidents = planet.residents.slice(0, 3)
+  const residentQueries = useResidents(firstThreeResidents)
   const residents = residentQueries
     .map((query) => query.data)
     .filter((resident): resident is Person => !!resident)
   const isLoadingResidents = residentQueries.some((query) => query.isLoading)
+  const hasMoreResidents = planet.residents.length > 3
 
   return (
     <article
@@ -86,21 +89,28 @@ export function PlanetCard({ planet }: PlanetCardProps) {
               {isLoadingResidents ? (
                 <span className={styles.loading}>Loading residents...</span>
               ) : residents.length > 0 ? (
-                <ul className={styles.residentNames}>
-                  {residents.map((resident) => {
-                    const residentId = extractIdFromUrl(resident.url)
-                    return (
-                      <li key={resident.url}>
-                        <Link 
-                          to={`/residents/${residentId}`}
-                          className={styles.residentLink}
-                        >
-                          {resident.name}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
+                <>
+                  <ul className={styles.residentNames}>
+                    {residents.map((resident) => {
+                      const residentId = extractIdFromUrl(resident.url)
+                      return (
+                        <li key={resident.url}>
+                          <Link 
+                            to={`/residents/${residentId}`}
+                            className={styles.residentLink}
+                          >
+                            {resident.name}
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  {hasMoreResidents && (
+                    <span className={styles.moreResidents}>
+                      + {planet.residents.length - 3} more
+                    </span>
+                  )}
+                </>
               ) : (
                 <span className={styles.noResidents}>No known residents</span>
               )}
