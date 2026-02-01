@@ -3,9 +3,8 @@ import { extractIdFromUrl } from '../../services/swapi'
 import { usePlanetResidents } from '../../hooks/usePlanetResidents'
 import { useInView } from '../../hooks/useInView'
 import { formatPopulation } from '../../utils/formatting'
-import { LoadMoreButton } from '../LoadMoreButton'
 import { PlanetDetailItem } from './PlanetDetailItem'
-import { ResidentsList } from './ResidentsList'
+import { PlanetCardFooter } from './PlanetCardFooter'
 import styles from './PlanetCard.module.css'
 
 interface PlanetCardProps {
@@ -66,37 +65,15 @@ export function PlanetCard({ planet }: PlanetCardProps) {
         />
       </dl>
 
-      <footer className={styles.footer}>
-        {planet.residents.length > 0 && (
-          <div className={styles.residents}>
-            <dt className={styles.residentLabel}>
-              Known Residents
-            </dt>
-            <dd className={styles.residentList}>
-              {isInitialLoading ? (
-                <span className={styles.loading}>Loading residents...</span>
-              ) : residents.length > 0 ? (
-                <>
-                  <ResidentsList residents={residents} />
-                  {hasMoreResidents && (
-                    <LoadMoreButton
-                      onClick={loadMore}
-                      isLoading={isLoadingNewResidents}
-                      remainingCount={planet.residents.length - loadedCount}
-                      label="Load More"
-                    />
-                  )}
-                </>
-              ) : (
-                <span className={styles.noResidents}>No known residents</span>
-              )}
-            </dd>
-          </div>
-        )}
-        <span className={styles.filmCount}>
-          Appears in {planet.films.length} film{planet.films.length !== 1 ? 's' : ''}
-        </span>
-      </footer>
+      <PlanetCardFooter
+        planet={planet}
+        residents={residents}
+        isInitialLoading={isInitialLoading}
+        isLoadingNewResidents={isLoadingNewResidents}
+        hasMoreResidents={hasMoreResidents}
+        loadedCount={loadedCount}
+        onLoadMore={loadMore}
+      />
     </article>
   )
 }
