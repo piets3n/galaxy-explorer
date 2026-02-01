@@ -4,9 +4,9 @@ import type { Planet, Person } from '../types/swapi'
 
 const RESIDENTS_PER_LOAD = 3
 
-export function usePlanetResidents(planet: Planet) {
+export function usePlanetResidents(planet: Planet, enabled = true) {
   const [loadedCount, setLoadedCount] = useState(RESIDENTS_PER_LOAD)
-  const residentsToLoad = planet.residents.slice(0, loadedCount)
+  const residentsToLoad = enabled ? planet.residents.slice(0, loadedCount) : []
   const residentQueries = useResidents(residentsToLoad)
   
   const residents = residentQueries

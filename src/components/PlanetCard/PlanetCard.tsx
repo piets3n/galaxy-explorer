@@ -1,6 +1,7 @@
 import type { Planet } from '../../types/swapi'
 import { extractIdFromUrl } from '../../services/swapi'
 import { usePlanetResidents } from '../../hooks/usePlanetResidents'
+import { useInView } from '../../hooks/useInView'
 import { formatPopulation } from '../../utils/formatting'
 import { LoadMoreButton } from '../LoadMoreButton'
 import { PlanetDetailItem } from './PlanetDetailItem'
@@ -14,7 +15,8 @@ interface PlanetCardProps {
 export function PlanetCard({ planet }: PlanetCardProps) {
   const planetId = extractIdFromUrl(planet.url)
   const id = `planet-${planetId}`
-  
+  const { ref, isInView } = useInView<HTMLElement>();
+
   const {
     residents,
     isLoadingNewResidents,
@@ -22,10 +24,11 @@ export function PlanetCard({ planet }: PlanetCardProps) {
     hasMoreResidents,
     loadedCount,
     loadMore,
-  } = usePlanetResidents(planet)
+  } = usePlanetResidents(planet, isInView)
 
   return (
     <article
+      ref={ref}
       className={styles.card}
       aria-labelledby={`${id}-name`}
       aria-describedby={`${id}-details`}
@@ -42,24 +45,24 @@ export function PlanetCard({ planet }: PlanetCardProps) {
       <dl id={`${id}-details`} className={styles.details}>
         <PlanetDetailItem label="Climate" value={planet.climate} />
         <PlanetDetailItem label="Terrain" value={planet.terrain} />
-        <PlanetDetailItem 
-          label="Population" 
-          value={formatPopulation(planet.population)} 
+        <PlanetDetailItem
+          label="Population"
+          value={formatPopulation(planet.population)}
         />
-        <PlanetDetailItem 
-          label="Diameter" 
-          value={planet.diameter} 
-          unit="km" 
+        <PlanetDetailItem
+          label="Diameter"
+          value={planet.diameter}
+          unit="km"
         />
-        <PlanetDetailItem 
-          label="Rotation Period" 
-          value={planet.rotation_period} 
-          unit="hours" 
+        <PlanetDetailItem
+          label="Rotation Period"
+          value={planet.rotation_period}
+          unit="hours"
         />
-        <PlanetDetailItem 
-          label="Orbital Period" 
-          value={planet.orbital_period} 
-          unit="days" 
+        <PlanetDetailItem
+          label="Orbital Period"
+          value={planet.orbital_period}
+          unit="days"
         />
       </dl>
 
