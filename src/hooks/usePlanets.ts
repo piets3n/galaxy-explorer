@@ -7,11 +7,3 @@ export function usePlanets(page = 1) {
     queryFn: () => swapiService.planets.getAll(page),
   })
 }
-
-export function usePlanet(id: string) {
-  return useQuery({
-    queryKey: ['planet', id],
-    queryFn: () => swapiService.planets.get(id),
-    enabled: !!id,
-  })
-}
