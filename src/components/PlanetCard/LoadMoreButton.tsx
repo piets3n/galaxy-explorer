@@ -13,14 +13,22 @@ export function LoadMoreButton({
   remainingCount,
   label = 'Load More'
 }: LoadMoreButtonProps) {
+  const buttonText = isLoading 
+    ? 'Loading...' 
+    : `${label} (+${remainingCount})`
+  
+  const ariaLabel = isLoading
+    ? `Loading more items, ${remainingCount} remaining`
+    : `${label}, ${remainingCount} remaining`
+
   return (
     <button
       onClick={onClick}
       className={styles.button}
-      aria-label={`${label}, ${remainingCount} remaining`}
+      aria-label={ariaLabel}
       disabled={isLoading}
     >
-      {isLoading ? 'Loading...' : `${label} (+${remainingCount})`}
+      {buttonText}
     </button>
   )
 }

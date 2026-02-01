@@ -1,5 +1,5 @@
 import type { Planet, Person } from '../../types/swapi'
-import { LoadMoreButton } from '../LoadMoreButton'
+import { LoadMoreButton } from './LoadMoreButton'
 import { ResidentsList } from './ResidentsList'
 import styles from './PlanetCard.module.css'
 
