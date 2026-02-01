@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import type { Planet } from '../../types/swapi'
 import { extractIdFromUrl } from '../../services/swapi'
-import { useResidentNames } from '../../hooks/useResidents'
+import { useResidents } from '../../hooks/useResidents'
+import type { Person } from '../../types/swapi'
 import styles from './PlanetCard.module.css'
 
 interface PlanetCardProps {
@@ -20,7 +22,11 @@ function formatPopulation(population: string): string {
 export function PlanetCard({ planet }: PlanetCardProps) {
   const planetId = extractIdFromUrl(planet.url)
   const id = `planet-${planetId}`
-  const { names: residentNames, isLoading: isLoadingResidents } = useResidentNames(planet.residents)
+  const residentQueries = useResidents(planet.residents)
+  const residents = residentQueries
+    .map((query) => query.data)
+    .filter((resident): resident is Person => !!resident)
+  const isLoadingResidents = residentQueries.some((query) => query.isLoading)
 
   return (
     <article
@@ -79,11 +85,21 @@ export function PlanetCard({ planet }: PlanetCardProps) {
             <dd className={styles.residentList}>
               {isLoadingResidents ? (
                 <span className={styles.loading}>Loading residents...</span>
-              ) : residentNames.length > 0 ? (
+              ) : residents.length > 0 ? (
                 <ul className={styles.residentNames}>
-                  {residentNames.map((name, index) => (
-                    <li key={index}>{name}</li>
-                  ))}
+                  {residents.map((resident) => {
+                    const residentId = extractIdFromUrl(resident.url)
+                    return (
+                      <li key={resident.url}>
+                        <Link 
+                          to={`/residents/${residentId}`}
+                          className={styles.residentLink}
+                        >
+                          {resident.name}
+                        </Link>
+                      </li>
+                    )
+                  })}
                 </ul>
               ) : (
                 <span className={styles.noResidents}>No known residents</span>

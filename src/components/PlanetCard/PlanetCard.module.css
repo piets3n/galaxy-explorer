@@ -112,6 +112,23 @@
   color: var(--accent-gold);
 }
 
+.residentLink {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.residentLink:hover {
+  color: var(--accent-gold);
+  text-decoration: underline;
+}
+
+.residentLink:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .loading {
   font-size: 0.875rem;
   color: var(--text-secondary);

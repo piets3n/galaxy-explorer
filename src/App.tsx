@@ -1,4 +1,6 @@
+import { Routes, Route } from 'react-router-dom'
 import { PlanetSlider } from './components/PlanetSlider'
+import { ResidentDetail } from './components/ResidentDetail'
 import styles from './App.module.css'
 
 function App() {
@@ -13,7 +15,10 @@ function App() {
         <p className={styles.subtitle}>Discover planets across the galaxy far, far away...</p>
       </header>
       <main id="main-content" className={styles.main}>
-        <PlanetSlider />
+        <Routes>
+          <Route path="/" element={<PlanetSlider />} />
+          <Route path="/residents/:id" element={<ResidentDetail />} />
+        </Routes>
       </main>
     </div>
   )
