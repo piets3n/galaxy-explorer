@@ -141,13 +141,6 @@
   font-style: italic;
 }
 
-.moreResidents {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  font-style: italic;
-  margin-top: 0.5rem;
-  display: block;
-}
 
 .filmCount {
   font-size: 0.875rem;

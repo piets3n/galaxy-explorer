@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Planet } from '../../types/swapi'
 import { extractIdFromUrl } from '../../services/swapi'
 import { useResidents } from '../../hooks/useResidents'
+import { LoadMoreButton } from '../LoadMoreButton'
 import type { Person } from '../../types/swapi'
 import styles from './PlanetCard.module.css'
 
@@ -22,14 +24,24 @@ function formatPopulation(population: string): string {
 export function PlanetCard({ planet }: PlanetCardProps) {
   const planetId = extractIdFromUrl(planet.url)
   const id = `planet-${planetId}`
-  // Only load first 3 residents to reduce API calls
-  const firstThreeResidents = planet.residents.slice(0, 3)
-  const residentQueries = useResidents(firstThreeResidents)
+  const [loadedCount, setLoadedCount] = useState(3)
+  
+  // Load residents incrementally (start with 3, load more on demand)
+  const residentsToLoad = planet.residents.slice(0, loadedCount)
+  const residentQueries = useResidents(residentsToLoad)
   const residents = residentQueries
     .map((query) => query.data)
     .filter((resident): resident is Person => !!resident)
-  const isLoadingResidents = residentQueries.some((query) => query.isLoading)
-  const hasMoreResidents = planet.residents.length > 3
+  // Check if we're loading new residents (queries that don't have data yet)
+  const isLoadingNewResidents = residentQueries
+    .some((query) => query.isLoading && !query.data)
+  // Only show initial loading if we have no residents at all
+  const isInitialLoading = residents.length === 0 && residentQueries.some((query) => query.isLoading)
+  const hasMoreResidents = planet.residents.length > loadedCount
+  
+  const handleLoadMore = () => {
+    setLoadedCount((prev) => Math.min(prev + 3, planet.residents.length))
+  }
 
   return (
     <article
@@ -86,7 +98,7 @@ export function PlanetCard({ planet }: PlanetCardProps) {
               Known Residents
             </dt>
             <dd className={styles.residentList}>
-              {isLoadingResidents ? (
+              {isInitialLoading ? (
                 <span className={styles.loading}>Loading residents...</span>
               ) : residents.length > 0 ? (
                 <>
@@ -106,9 +118,12 @@ export function PlanetCard({ planet }: PlanetCardProps) {
                     })}
                   </ul>
                   {hasMoreResidents && (
-                    <span className={styles.moreResidents}>
-                      + {planet.residents.length - 3} more
-                    </span>
+                    <LoadMoreButton
+                      onClick={handleLoadMore}
+                      isLoading={isLoadingNewResidents}
+                      remainingCount={planet.residents.length - loadedCount}
+                      label="Load More"
+                    />
                   )}
                 </>
               ) : (
