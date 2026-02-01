@@ -65,7 +65,7 @@ export function PlanetSlider() {
         <div className={styles.loading}>
           <span className="srOnly">Loading planets from the galaxy...</span>
           <div className={styles.loadingAnimation} aria-hidden="true">
-            🌍✨⭐
+          🪐✨⭐
           </div>
           <p className={styles.loadingText}>Scanning the galaxy for planets...</p>
         </div>

@@ -14,7 +14,7 @@ export function ResidentDetail() {
           <div className={styles.loadingAnimation} aria-hidden="true">
             ⭐✨⭐
           </div>
-          <p className={styles.loadingText}>Scanning the database...</p>
+          <p className={styles.loadingText}>Scanning the galaxy for resident information...</p>
         </div>
       </div>
     )
