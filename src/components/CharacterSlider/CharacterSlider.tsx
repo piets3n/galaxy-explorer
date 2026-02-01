@@ -69,7 +69,7 @@ export function CharacterSlider() {
             tabIndex={-1}
         >
             <div className={styles.header}>
-                <h2 className={styles.title}>Characters</h2>
+                <h2 className={styles.title}>Characters 𐃉</h2>
                 <span className="srOnly">
                     Page {page} of approximately {Math.ceil((data?.count || 0) / 10)} pages
                 </span>

@@ -1,4 +1,4 @@
-import { CharacterSlider } from './components/CharacterSlider'
+import { PlanetSlider } from './components/PlanetSlider'
 import styles from './App.module.css'
 
 function App() {
@@ -9,11 +9,11 @@ function App() {
         <span aria-hidden="true">⚡ Hyperspace Jump to Content</span>
       </a>
       <header className={styles.header}>
-        <h1 className={styles.title}>Star Wars API Explorer</h1>
-        <p className={styles.subtitle}>Explore the galaxy far, far away...</p>
+        <h1 className={styles.title}>Star Wars Galaxy Explorer</h1>
+        <p className={styles.subtitle}>Discover planets across the galaxy far, far away...</p>
       </header>
       <main id="main-content" className={styles.main}>
-        <CharacterSlider />
+        <PlanetSlider />
       </main>
     </div>
   )
