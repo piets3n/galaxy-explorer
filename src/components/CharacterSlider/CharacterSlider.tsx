@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { CharacterCard } from '../CharacterCard'
 import { useCharacters } from '../../hooks/useCharacters'
 import styles from './CharacterSlider.module.css'
@@ -31,7 +31,7 @@ export function CharacterSlider() {
         return (
             <div className={styles.container} role="status" aria-live="polite">
                 <div className={styles.loading}>
-                    <span className={styles.srOnly}>Loading characters from the galaxy...</span>
+                    <span className="srOnly">Loading characters from the galaxy...</span>
                     <div className={styles.loadingAnimation} aria-hidden="true">
                         ⭐✨⭐
                     </div>
@@ -70,7 +70,7 @@ export function CharacterSlider() {
         >
             <div className={styles.header}>
                 <h2 className={styles.title}>Characters</h2>
-                <span className={styles.srOnly}>
+                <span className="srOnly">
                     Page {page} of approximately {Math.ceil((data?.count || 0) / 10)} pages
                 </span>
             </div>
@@ -84,7 +84,7 @@ export function CharacterSlider() {
                     aria-disabled={!hasPrevious}
                 >
                     <span aria-hidden="true">←</span>
-                    <span className={styles.srOnly}>Previous</span>
+                    <span className="srOnly">Previous</span>
                 </button>
 
                 <div
@@ -94,7 +94,7 @@ export function CharacterSlider() {
                     aria-live="polite"
                 >
                     {characters.length > 0 && (
-                        <span className={styles.srOnly}>
+                        <span className="srOnly">
                             Showing {characters.length} characters
                         </span>
                     )}
@@ -113,7 +113,7 @@ export function CharacterSlider() {
                     aria-disabled={!hasNext}
                 >
                     <span aria-hidden="true">→</span>
-                    <span className={styles.srOnly}>Next</span>
+                    <span className="srOnly">Next</span>
                 </button>
             </div>
 

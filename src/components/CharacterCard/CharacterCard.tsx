@@ -20,7 +20,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
         <h3 id={`${id}-name`} className={styles.name}>
           {character.name}
         </h3>
-        <span className={styles.srOnly}>
+        <span className="srOnly">
           {character.gender}, born {character.birth_year}, {character.height}cm tall
         </span>
       </header>
