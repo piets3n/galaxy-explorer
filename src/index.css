@@ -4,6 +4,16 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 :root {
   --bg-primary: #000000;
   --bg-secondary: #1a1a1a;
