@@ -16,18 +16,18 @@ A React application that explores the Star Wars universe using the [SWAPI (Star 
 ### Prerequisites
 
 - Node.js 18+ 
-- npm or yarn
+- pnpm (install with `npm install -g pnpm`)
 
 ### Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The app will be available at `http://localhost:5173`
@@ -35,13 +35,13 @@ The app will be available at `http://localhost:5173`
 ### Build
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ### Preview Production Build
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
 ## Project Structure
