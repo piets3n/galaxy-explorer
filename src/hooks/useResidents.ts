@@ -6,7 +6,7 @@ export function useResidents(residentUrls: string[]) {
     queries: residentUrls.map((url) => {
       const id = extractIdFromUrl(url)
       return {
-        queryKey: ['resident', id],
+        queryKey: ['character', id], // Use same key as useCharacter for cache sharing
         queryFn: () => swapiService.people.get(id),
         enabled: !!id && !!url,
         staleTime: 1000 * 60 * 10,
