@@ -9,7 +9,7 @@ A React application that explores the Star Wars universe using the [SWAPI (Star 
 - **Vite** - Build Tool & Dev Server
 - **React Router** - Navigation
 - **TanStack Query** - Data Fetching & Caching
-- **CSS Modules** - Scoped Styling
+- **CSS Modules** - Scoped Styling (Decided against Tailwind CSS)
 
 ## Getting Started
 
