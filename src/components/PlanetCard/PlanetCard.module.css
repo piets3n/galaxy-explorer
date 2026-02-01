@@ -67,12 +67,60 @@
   margin-top: auto;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+}
+
+.residents {
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
-.residentCount {
+.residentLabel {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.residentList {
+  margin: 0;
+}
+
+.residentNames {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.residentNames li {
   font-size: 0.875rem;
   color: var(--accent-cyan);
+  padding-left: 0.5rem;
+  position: relative;
+}
+
+.residentNames li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-gold);
+}
+
+.loading {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.noResidents {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
   font-style: italic;
 }
 

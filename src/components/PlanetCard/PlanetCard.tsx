@@ -1,5 +1,6 @@
 import type { Planet } from '../../types/swapi'
 import { extractIdFromUrl } from '../../services/swapi'
+import { useResidentNames } from '../../hooks/useResidents'
 import styles from './PlanetCard.module.css'
 
 interface PlanetCardProps {
@@ -19,6 +20,7 @@ function formatPopulation(population: string): string {
 export function PlanetCard({ planet }: PlanetCardProps) {
   const planetId = extractIdFromUrl(planet.url)
   const id = `planet-${planetId}`
+  const { names: residentNames, isLoading: isLoadingResidents } = useResidentNames(planet.residents)
 
   return (
     <article
@@ -69,9 +71,26 @@ export function PlanetCard({ planet }: PlanetCardProps) {
       </dl>
 
       <footer className={styles.footer}>
-        <span className={styles.residentCount}>
-          {planet.residents.length} known resident{planet.residents.length !== 1 ? 's' : ''}
-        </span>
+        {planet.residents.length > 0 && (
+          <div className={styles.residents}>
+            <dt className={styles.residentLabel}>
+              Known Residents
+            </dt>
+            <dd className={styles.residentList}>
+              {isLoadingResidents ? (
+                <span className={styles.loading}>Loading residents...</span>
+              ) : residentNames.length > 0 ? (
+                <ul className={styles.residentNames}>
+                  {residentNames.map((name, index) => (
+                    <li key={index}>{name}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span className={styles.noResidents}>No known residents</span>
+              )}
+            </dd>
+          </div>
+        )}
         <span className={styles.filmCount}>
           Appears in {planet.films.length} film{planet.films.length !== 1 ? 's' : ''}
         </span>
