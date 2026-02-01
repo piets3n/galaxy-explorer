@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { useCharacter } from '../../hooks/useCharacters'
+import { useCharacter } from '../../hooks/useCharacter'
 import styles from './ResidentDetail.module.css'
 
 export function ResidentDetail() {
