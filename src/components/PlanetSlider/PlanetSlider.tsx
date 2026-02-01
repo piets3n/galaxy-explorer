@@ -1,12 +1,45 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { PlanetCard } from '../PlanetCard'
 import { usePlanets } from '../../hooks/usePlanets'
 import styles from './PlanetSlider.module.css'
 
+function getPageFromUrl(): number {
+  const params = new URLSearchParams(window.location.search)
+  const pageParam = params.get('page')
+  const page = pageParam ? parseInt(pageParam, 10) : 1
+  return isNaN(page) || page < 1 ? 1 : page
+}
+
+function updateUrlPage(page: number) {
+  const url = new URL(window.location.href)
+  if (page === 1) {
+    url.searchParams.delete('page')
+  } else {
+    url.searchParams.set('page', page.toString())
+  }
+  window.history.pushState({}, '', url.toString())
+}
+
 export function PlanetSlider() {
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(getPageFromUrl)
   const { data, isLoading, isError, error } = usePlanets(page)
   const sliderRef = useRef<HTMLDivElement>(null)
+
+  // Update URL when page changes
+  useEffect(() => {
+    updateUrlPage(page)
+  }, [page])
+
+  // Listen for browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const newPage = getPageFromUrl()
+      setPage(newPage)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
 
   const planets = data?.results || []
   const hasNext = !!data?.next
