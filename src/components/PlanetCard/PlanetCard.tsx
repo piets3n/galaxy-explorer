@@ -36,6 +36,11 @@ export function PlanetCard({ planet }: PlanetCardProps) {
         <h3 id={`${id}-name`} className={styles.name}>
           {planet.name}
         </h3>
+        <p className={styles.filmInfo}>
+          {planet.films.length === 0
+            ? 'Not in a movie'
+            : `Appears in ${planet.films.length === 1 ? 'a' : planet.films.length} movie${planet.films.length !== 1 ? 's' : ''}`}
+        </p>
         <span className="srOnly">
           {planet.climate} climate, {planet.terrain} terrain, population {formatPopulation(planet.population)}
         </span>

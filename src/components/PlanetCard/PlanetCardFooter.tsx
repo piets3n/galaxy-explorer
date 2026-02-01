@@ -48,9 +48,6 @@ export function PlanetCardFooter({
           </dd>
         </div>
       )}
-      <span className={styles.filmCount}>
-        Appears in {planet.films.length} film{planet.films.length !== 1 ? 's' : ''}
-      </span>
     </footer>
   )
 }
