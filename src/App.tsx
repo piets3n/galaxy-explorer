@@ -1,3 +1,4 @@
+import { CharacterSlider } from './components/CharacterSlider'
 import styles from './App.module.css'
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
         <p className={styles.subtitle}>Explore the galaxy far, far away...</p>
       </header>
       <main className={styles.main}>
-        <p>Coming soon...</p>
+        <CharacterSlider />
       </main>
     </div>
   )
